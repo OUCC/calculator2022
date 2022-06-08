@@ -88,15 +88,29 @@ double calculate(List<Term> terms) {
 
 /// 数式の数字又は演算子を表します
 class Term {
-  bool isOperator;
-  double number = 0.0;
-  operators operator = operators.add;
+  /// 演算子のときtrueを返します
+  final bool isOperator;
+  final double number;
+  final operators operator;
 
-  Term.fromNum(this.number) : isOperator = false;
-  Term.fromOpr(this.operator) : isOperator = true;
+  /// 数字から数字の[Term]を生成します
+  Term.fromNum(this.number)
+      : isOperator = false,
+        operator = operators.add;
+
+  /// 演算子から演算子の[Term]を生成します
+  Term.fromOpr(this.operator)
+      : isOperator = true,
+        number = 0;
+
+  /// 演算子の文字列から演算子の[Term]を生成します
+  ///
+  /// 正しい演算子の形式の文字列でない場合は[ArgumentError]が投げられます
   Term.fromOprStr(String oprStr) : this.fromOpr(parseStrToOpr(oprStr));
 
   /// 文字列を演算子に変換します
+  ///
+  /// 引数が正しい演算子の形式の文字列でない場合は[ArgumentError]が投げられます
   static operators parseStrToOpr(String oprStr) {
     operators opr;
     switch (oprStr) {
