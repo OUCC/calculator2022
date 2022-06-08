@@ -1,0 +1,35 @@
+name: test & build
+
+on:
+  push:
+    - feature/**
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  Android CI:
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "11"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "2.10.4"
+      - run: flutter pub get
+      - name: Android Test
+        run: flutter test
+      - name: Android Build aab
+        run: flutter build appbundle
+  Web CI:
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "2.10.4"
+      - run: flutter pub get
+      - name: Web Test
+        run: flutter test
+      - name: Web Build
+        run: flutter build web
