@@ -2,8 +2,6 @@ name: github pages
 
 on: [push]
 
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-18.04
