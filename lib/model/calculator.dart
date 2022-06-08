@@ -1,18 +1,24 @@
 typedef BinaryOperator = double Function(double left, double right);
 typedef UnaryOperator = double Function(double arg);
 
+/// 半角空白で区切られた式を逆ポーランド記法に基づく配列に変換します
 List<Term> parseStrToPolish(String formula) {
   final terms = formula.split(' ');
   final stack = <String>[];
   final result = <Term>[];
+
+  // https://knowledge.sakura.ad.jp/220/
+  // これを参考にスタックを使って実装した
   for (var term in terms) {
     final num = double.tryParse(term);
     if (num != null) {
+      // 数字はresultに積む
       result.add(Term.fromNum(num));
       continue;
     }
 
     if (term == "+" || term == "-") {
+      // +, - より優先順位の高い演算子をstackからresultに積む
       while (stack.isNotEmpty) {
         final lastTerm = stack.last;
         if (lastTerm == "*" || lastTerm == "/") {
@@ -29,6 +35,7 @@ List<Term> parseStrToPolish(String formula) {
     }
 
     if (term == ")") {
+      // ) が出てきたら ( が出てくるまでstackからresultに積む
       while (stack.isNotEmpty) {
         final lastTerm = stack.last;
         if (lastTerm == "(") {
@@ -44,6 +51,7 @@ List<Term> parseStrToPolish(String formula) {
     stack.add(term);
   }
 
+  // stackに残ってる演算子をstackに積む
   while (stack.isNotEmpty) {
     result.add(Term.fromOprStr(stack.removeLast()));
   }
@@ -51,6 +59,7 @@ List<Term> parseStrToPolish(String formula) {
   return result;
 }
 
+/// 逆ポーランド記法に基づく配列から演算を行います
 double calculate(List<Term> terms) {
   final stack = <double>[];
   while (true) {
@@ -77,6 +86,7 @@ double calculate(List<Term> terms) {
   return stack.first;
 }
 
+/// 数式の数字又は演算子を表します
 class Term {
   bool isOperator;
   double number = 0.0;
@@ -86,6 +96,7 @@ class Term {
   Term.fromOpr(this.operator) : isOperator = true;
   Term.fromOprStr(String oprStr) : this.fromOpr(parseStrToOpr(oprStr));
 
+  /// 文字列を演算子に変換します
   static operators parseStrToOpr(String oprStr) {
     operators opr;
     switch (oprStr) {
@@ -120,7 +131,8 @@ class Term {
   int get hashCode => super.hashCode;
 }
 
-extension OperatorEx on operators {
+extension OperatorExt on operators {
+  /// 2項演算子であるときtrueを返します
   bool get isBinary {
     return this == operators.add ||
         this == operators.sub ||
@@ -128,6 +140,9 @@ extension OperatorEx on operators {
         this == operators.div;
   }
 
+  /// 2項演算子を実行する関数を返します
+  ///
+  /// 2項演算子でない者に対して実行された場合[ArgumentError]が投げられます
   BinaryOperator get binaryOperator {
     switch (this) {
       case operators.add:
@@ -147,6 +162,9 @@ extension OperatorEx on operators {
     }
   }
 
+  /// 単項項演算子を実行する関数を返します
+  ///
+  /// 単項演算子でない者に対して実行された場合[ArgumentError]が投げられます
   UnaryOperator get unaryOperator {
     switch (this) {
       default:
@@ -159,4 +177,17 @@ extension OperatorEx on operators {
   }
 }
 
-enum operators { add, sub, multi, div }
+/// 演算子
+enum operators {
+  /// \+演算子
+  add,
+
+  /// \-演算子
+  sub,
+
+  /// ×演算子
+  multi,
+
+  /// ÷演算子
+  div
+}
