@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Android CI:
+  Android_CI:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
         run: flutter test
       - name: Android Build aab
         run: flutter build appbundle
-  Web CI:
+  Web_CI:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
