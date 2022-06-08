@@ -2,7 +2,8 @@ name: test & build
 
 on:
   push:
-    - feature/**
+    branches:
+      - feature/**
   pull_request:
   workflow_dispatch:
 
