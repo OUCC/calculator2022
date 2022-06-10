@@ -1,15 +1,18 @@
-typedef BinaryOperator = double Function(double left, double right);
-typedef UnaryOperator = double Function(double arg);
+import 'package:calculator2022/model/operators.dart';
 
 /// 半角空白で区切られた式を逆ポーランド記法に基づく配列に変換します
-List<Term> parseStrToPolish(String formula) {
-  final terms = formula.split(' ');
-  final stack = <String>[];
+List<Term> parseStr2Polish(String formula) {
+  return parseStrArr2Polish(formula.split(" "));
+}
+
+/// Stringの配列の式を逆ポーランド記法に基づく配列に変換します
+List<Term> parseStrArr2Polish(List<String> formula) {
+  final stack = <Operator>[];
   final result = <Term>[];
 
   // https://knowledge.sakura.ad.jp/220/
   // これを参考にスタックを使って実装した
-  for (var term in terms) {
+  for (var term in formula) {
     final num = double.tryParse(term);
     if (num != null) {
       // 数字はresultに積む
@@ -17,43 +20,45 @@ List<Term> parseStrToPolish(String formula) {
       continue;
     }
 
-    if (term == "+" || term == "-") {
-      // +, - より優先順位の高い演算子をstackからresultに積む
-      while (stack.isNotEmpty) {
-        final lastTerm = stack.last;
-        if (lastTerm == "*" || lastTerm == "/") {
-          result.add(
-              Term.fromOpr(lastTerm == "*" ? operators.multi : operators.div));
-          stack.removeLast();
-          continue;
-        } else {
-          break;
-        }
-      }
-      stack.add(term);
-      continue;
-    }
+    // 数字でないなら演算子であるはず
+    final opr = parseStr2Opr(term);
 
-    if (term == ")") {
+    // )だけ一般化できないので別で実装する
+    if (opr == Operators.rightBrace) {
       // ) が出てきたら ( が出てくるまでstackからresultに積む
       while (stack.isNotEmpty) {
         final lastTerm = stack.last;
-        if (lastTerm == "(") {
+        if (lastTerm == Operators.leftBrace) {
           stack.removeLast();
           break;
         }
         stack.removeLast();
-        result.add(Term.fromOprStr(lastTerm));
+        result.add(Term.fromOpr(lastTerm));
       }
       continue;
     }
 
-    stack.add(term);
+    // その演算子より優先度の高いものをすべて全てresultに積む
+    while (stack.isNotEmpty) {
+      final lastTerm = stack.last;
+      if (opr != Operators.leftBrace && lastTerm.priority > opr.priority) {
+        result.add(Term.fromOpr(stack.removeLast()));
+        continue;
+      } else {
+        break;
+      }
+    }
+
+    stack.add(opr);
   }
 
   // stackに残ってる演算子をstackに積む
   while (stack.isNotEmpty) {
-    result.add(Term.fromOprStr(stack.removeLast()));
+    var last = stack.removeLast();
+    if (last == Operators.rightBrace) {
+      continue;
+    }
+    result.add(Term.fromOpr(last));
   }
 
   return result;
@@ -67,10 +72,12 @@ double calculate(List<Term> terms) {
     if (!item.isOperator) {
       stack.add(item.number);
     } else if (item.isOperator && item.operator.isBinary && stack.length >= 2) {
+      // 二項演算子の計算
       final right = stack.removeLast();
       final left = stack.removeLast();
       stack.add(item.operator.binaryOperator(left, right));
     } else if (item.isOperator && !item.operator.isBinary && stack.isNotEmpty) {
+      // 単項演算子の計算
       final arg = stack.removeLast();
       stack.add(item.operator.unaryOperator(arg));
     } else {
@@ -91,12 +98,12 @@ class Term {
   /// 演算子のときtrueを返します
   final bool isOperator;
   final double number;
-  final operators operator;
+  final Operator operator;
 
   /// 数字から数字の[Term]を生成します
   Term.fromNum(this.number)
       : isOperator = false,
-        operator = operators.add;
+        operator = 0;
 
   /// 演算子から演算子の[Term]を生成します
   Term.fromOpr(this.operator)
@@ -106,32 +113,7 @@ class Term {
   /// 演算子の文字列から演算子の[Term]を生成します
   ///
   /// 正しい演算子の形式の文字列でない場合は[ArgumentError]が投げられます
-  Term.fromOprStr(String oprStr) : this.fromOpr(parseStrToOpr(oprStr));
-
-  /// 文字列を演算子に変換します
-  ///
-  /// 引数が正しい演算子の形式の文字列でない場合は[ArgumentError]が投げられます
-  static operators parseStrToOpr(String oprStr) {
-    operators opr;
-    switch (oprStr) {
-      case "*":
-        opr = operators.multi;
-        break;
-      case "/":
-        opr = operators.div;
-        break;
-      case "-":
-        opr = operators.sub;
-        break;
-      case "+":
-        opr = operators.add;
-        break;
-      default:
-        throw ArgumentError.value(
-            oprStr, "引数の形式エラー", "oprStrの形式が正しくありません。\noprStrは演算子である必要があります。");
-    }
-    return opr;
-  }
+  Term.fromOprStr(String oprStr) : this.fromOpr(parseStr2Opr(oprStr));
 
   @override
   bool operator ==(covariant Term other) {
@@ -141,67 +123,11 @@ class Term {
   }
 
   @override
-  // ignore: unnecessary_overrides
-  int get hashCode => super.hashCode;
-}
-
-extension OperatorExt on operators {
-  /// 2項演算子であるときtrueを返します
-  bool get isBinary {
-    return this == operators.add ||
-        this == operators.sub ||
-        this == operators.multi ||
-        this == operators.div;
+  int get hashCode {
+    var result = 3;
+    result = 31 * result + operator.hashCode;
+    result = 31 * result + number.hashCode;
+    result = 31 * result + isOperator.hashCode;
+    return result;
   }
-
-  /// 2項演算子を実行する関数を返します
-  ///
-  /// 2項演算子でない者に対して実行された場合[ArgumentError]が投げられます
-  BinaryOperator get binaryOperator {
-    switch (this) {
-      case operators.add:
-        return (left, right) => left + right;
-      case operators.sub:
-        return (left, right) => left - right;
-      case operators.multi:
-        return (left, right) => left * right;
-      case operators.div:
-        return (left, right) => left / right;
-      default:
-        if (!isBinary) {
-          throw ArgumentError.value(this, "$thisは二項演算子ではありません。");
-        } else {
-          throw UnimplementedError("$thisの演算はまだ実装されていません。");
-        }
-    }
-  }
-
-  /// 単項項演算子を実行する関数を返します
-  ///
-  /// 単項演算子でない者に対して実行された場合[ArgumentError]が投げられます
-  UnaryOperator get unaryOperator {
-    switch (this) {
-      default:
-        if (isBinary) {
-          throw ArgumentError.value(this, "$thisは単項演算子ではありません。");
-        } else {
-          throw UnimplementedError("$thisの演算はまだ実装されていません。");
-        }
-    }
-  }
-}
-
-/// 演算子
-enum operators {
-  /// \+演算子
-  add,
-
-  /// \-演算子
-  sub,
-
-  /// ×演算子
-  multi,
-
-  /// ÷演算子
-  div
 }
