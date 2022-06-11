@@ -17,6 +17,11 @@ final Map<String, Operator> _strOprMap = {
   "*": 0x110,
   "/": 0x111,
   "^": 0x120,
+  "sin": 0x2F0,
+  "cos": 0x2F1,
+  "tan": 0x2F2,
+  "ln": 0x2F3,
+  "log": 0x2F4,
 };
 
 final Map<Operator, BinaryOperator> _binaryOprFuncMap = {
@@ -27,7 +32,13 @@ final Map<Operator, BinaryOperator> _binaryOprFuncMap = {
   0x120: (left, right) => pow(left, right).toDouble()
 };
 
-final Map<Operator, UnaryOperator> _unaryOprFuncMap = {};
+final Map<Operator, UnaryOperator> _unaryOprFuncMap = {
+  0x2F0: (arg) => sin(arg), // 弧度法
+  0x2F1: (arg) => cos(arg),
+  0x2F2: (arg) => tan(arg),
+  0x2F3: (arg) => log(arg),
+  0x2F4: (arg) => log(arg) / log10e,
+};
 
 extension OperatorEx on Operator {
   /// 二項演算子であるときtrueを返します
@@ -134,4 +145,22 @@ class Operators {
 
   /// `/` 割り算
   static const div = 0x111;
+
+  /// `^` 累乗
+  static const pow = 0x120;
+
+  /// `sin` sin関数 引数は弧度法
+  static const sin = 0x2F0;
+
+  /// `cos` cos関数 引数は弧度法
+  static const cos = 0x2F1;
+
+  /// `tan` tan関数 引数は弧度法
+  static const tan = 0x2F2;
+
+  /// `ln` 自然対数 eが底の対数関数
+  static const ln = 0x2F3;
+
+  /// `log` 常用対数 10が底の対数関数
+  static const log = 0x2F4;
 }
