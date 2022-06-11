@@ -22,6 +22,7 @@ final Map<String, Operator> _strOprMap = {
   "tan": 0x2F2,
   "ln": 0x2F3,
   "log": 0x2F4,
+  "sqrt": 0x2F5
 };
 
 final Map<Operator, BinaryOperator> _binaryOprFuncMap = {
@@ -38,6 +39,7 @@ final Map<Operator, UnaryOperator> _unaryOprFuncMap = {
   0x2F2: (arg) => tan(arg),
   0x2F3: (arg) => log(arg),
   0x2F4: (arg) => log(arg) / log10e,
+  0x2F5: (arg) => sqrt(arg),
 };
 
 extension OperatorEx on Operator {
@@ -163,4 +165,7 @@ class Operators {
 
   /// `log` 常用対数 10が底の対数関数
   static const log = 0x2F4;
+
+  /// `sqrt` 平方根
+  static const sqrt = 0x2F5;
 }
