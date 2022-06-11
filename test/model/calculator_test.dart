@@ -48,4 +48,12 @@ void main() {
 
     expect(result, 14.35);
   });
+
+  test("calculate-unaryoperator", () {
+    const formula = "1 + 2 + 3 * sin ( ( 0.25 + 0.25 ) * pi ) + ln ( e ^ 2 )";
+
+    var result = calculate(parseStr2Polish(formula));
+
+    expect(result, 8);
+  });
 }

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:calculator2022/model/operators.dart';
 
 /// 半角空白で区切られた式を逆ポーランド記法に基づく配列に変換します
@@ -13,7 +14,7 @@ List<Term> parseStrArr2Polish(List<String> formula) {
   // https://knowledge.sakura.ad.jp/220/
   // これを参考にスタックを使って実装した
   for (var term in formula) {
-    final num = double.tryParse(term);
+    final num = double.tryParse(term) ?? tryParseChars(term);
     if (num != null) {
       // 数字はresultに積む
       result.add(Term.fromNum(num));
@@ -91,6 +92,18 @@ double calculate(List<Term> terms) {
     throw ArgumentError.value(terms, "termsの形式が正しくありません。");
   }
   return stack.first;
+}
+
+/// 特殊な文字を定数に変換します
+double? tryParseChars(String source) {
+  switch (source) {
+    case "pi":
+      return pi;
+    case "e":
+      return e;
+    default:
+      return null;
+  }
 }
 
 /// 数式の数字又は演算子を表します
