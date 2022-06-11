@@ -38,7 +38,7 @@ final Map<Operator, UnaryOperator> _unaryOprFuncMap = {
   0x2F1: (arg) => cos(arg),
   0x2F2: (arg) => tan(arg),
   0x2F3: (arg) => log(arg),
-  0x2F4: (arg) => log(arg) / log10e,
+  0x2F4: (arg) => log(arg) / ln10,
   0x2F5: (arg) => sqrt(arg),
 };
 
