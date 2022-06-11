@@ -51,3 +51,8 @@ https://sbfl.net/blog/2014/12/20/dart-style-guide/
 
 時間計算
 - 四則演算(和差:時間、積商:実数)
+
+## workflows
+
+gh-pagesへのデプロイは https://zenn.dev/nekomimi_daimao/articles/26fd2e3b763191 の丸パクリ
+ci/cdは https://github.com/subosito/flutter-action を使用
