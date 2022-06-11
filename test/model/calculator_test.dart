@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:calculator2022/model/calculator.dart';
+import 'package:calculator2022/model/operators.dart';
 
 void main() {
   test("parseStrToPolish", () {
@@ -11,17 +12,17 @@ void main() {
       Term.fromNum(3),
       Term.fromNum(4),
       Term.fromNum(5),
-      Term.fromOpr(operators.add),
+      Term.fromOpr(Operators.add),
       Term.fromNum(20),
-      Term.fromOpr(operators.div),
-      Term.fromOpr(operators.multi),
+      Term.fromOpr(Operators.div),
+      Term.fromOpr(Operators.multi),
       Term.fromNum(-10),
-      Term.fromOpr(operators.sub),
-      Term.fromOpr(operators.add),
-      Term.fromOpr(operators.add)
+      Term.fromOpr(Operators.sub),
+      Term.fromOpr(Operators.add),
+      Term.fromOpr(Operators.add)
     ];
 
-    final result = parseStrToPolish(str);
+    final result = parseStr2Polish(str);
 
     expect(result, expectedTerms);
   });
@@ -33,14 +34,14 @@ void main() {
       Term.fromNum(3),
       Term.fromNum(4),
       Term.fromNum(5),
-      Term.fromOpr(operators.add),
+      Term.fromOpr(Operators.add),
       Term.fromNum(20),
-      Term.fromOpr(operators.div),
-      Term.fromOpr(operators.multi),
+      Term.fromOpr(Operators.div),
+      Term.fromOpr(Operators.multi),
       Term.fromNum(-10),
-      Term.fromOpr(operators.sub),
-      Term.fromOpr(operators.add),
-      Term.fromOpr(operators.add)
+      Term.fromOpr(Operators.sub),
+      Term.fromOpr(Operators.add),
+      Term.fromOpr(Operators.add)
     ];
 
     final result = calculate(argTerms);
