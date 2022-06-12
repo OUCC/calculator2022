@@ -14,6 +14,7 @@ final Map<String, Operator> _strOprMap = {
   ")": 0x002,
   "+": 0x100,
   "-": 0x101,
+  "//": 0x102,
   "*": 0x110,
   "/": 0x111,
   "^": 0x120,
@@ -28,6 +29,7 @@ final Map<String, Operator> _strOprMap = {
 final Map<Operator, BinaryOperator> _binaryOprFuncMap = {
   0x100: (left, right) => left + right,
   0x101: (left, right) => left - right,
+  0x102: (left, right) => left * right / (left + right),
   0x110: (left, right) => left * right,
   0x111: (left, right) => left / right,
   0x120: (left, right) => pow(left, right).toDouble()
@@ -141,6 +143,9 @@ class Operators {
 
   /// `-` 引き算
   static const sub = 0x101;
+
+  /// `//` 並列接続の抵抗の足し算演算子
+  static const para = 0x102;
 
   /// `*` 掛け算
   static const multi = 0x110;
