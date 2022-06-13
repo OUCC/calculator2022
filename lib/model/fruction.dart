@@ -1,21 +1,21 @@
 class Fruction {
-  double Numerator, Denominator;
+  int Numerator, Denominator;
   Fruction(this.Numerator, this.Denominator) {
-    final numrator=this.Numerator;
+    final numrator = this.Numerator;
     Reduce();
   }
   void Reduce() {
-    var gcd = Gcd(Numerator, Denominator);
-    Numerator /= gcd;
-    Denominator /= gcd;
+    int gcd = Gcd(Numerator, Denominator);
+    Numerator = (Numerator / gcd).toInt();
+    Denominator = (Denominator / gcd).toInt();
   }
 
   @override
   String toString() {
-    return Numerator.toString() + "/" + Denominator.toString();
+    return "$Numerator/$Denominator";
   }
 
-  num Gcd(num a, num b) {
+  int Gcd(int a, int b) {
     return ((a % b) == 0) ? b : Gcd(b, (a % b));
   }
 
@@ -26,21 +26,26 @@ class Fruction {
     result = 31 * result + Denominator.hashCode;
     return result;
   }
-  
+
   Fruction operator +(Fruction i) {
-    return Fruction(this.Numerator*i.Denominator+i.Numerator*this.Denominator, this.Denominator*i.Denominator);
+    return Fruction(
+        this.Numerator * i.Denominator + i.Numerator * this.Denominator,
+        this.Denominator * i.Denominator);
   }
 
   Fruction operator -(Fruction i) {
-    return Fruction(this.Numerator*i.Denominator - i.Numerator*this.Denominator, this.Denominator*i.Denominator);
+    return Fruction(
+        this.Numerator * i.Denominator - i.Numerator * this.Denominator,
+        this.Denominator * i.Denominator);
   }
 
   Fruction operator *(Fruction i) {
-    return Fruction(i.Numerator * this.Numerator, i.Denominator*this.Numerator);
+    return Fruction(
+        i.Numerator * this.Numerator, i.Denominator * this.Numerator);
   }
 
   Fruction operator /(Fruction i) {
-    return Fruction(this.Numerator * this.Denominator, this.Denominator*i.Numerator);
+    return Fruction(
+        this.Numerator * this.Denominator, this.Denominator * i.Numerator);
   }
-
 }
