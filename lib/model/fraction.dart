@@ -1,6 +1,6 @@
-class Fruction {
+class Fraction {
   int numerator, denominator;
-  Fruction(this.numerator, this.denominator) {
+  Fraction(this.numerator, this.denominator) {
     if (denominator == 0) {
       throw ArgumentError("分母が0になっています");
     } else if (denominator < 0) {
@@ -37,51 +37,51 @@ class Fruction {
   }
 
   //以下演算子のオーバーロード
-  Fruction operator +(other) {
-    if (other.runtimeType == Fruction) {
-      Fruction i = other;
-      return Fruction(numerator * i.denominator + i.numerator * denominator,
+  Fraction operator +(other) {
+    if (other.runtimeType == Fraction) {
+      Fraction i = other;
+      return Fraction(numerator * i.denominator + i.numerator * denominator,
           denominator * i.denominator);
     } else if (other.runtimeType == int) {
       int i = other;
-      return Fruction(numerator + i * denominator, denominator);
+      return Fraction(numerator + i * denominator, denominator);
     } else {
       throw ArgumentError("無効な計算です");
     }
   }
 
-  Fruction operator -(other) {
-    if (other.runtimeType == Fruction) {
-      Fruction i = other;
-      return Fruction(numerator * i.denominator - i.numerator * denominator,
+  Fraction operator -(other) {
+    if (other.runtimeType == Fraction) {
+      Fraction i = other;
+      return Fraction(numerator * i.denominator - i.numerator * denominator,
           denominator * i.denominator);
     } else if (other.runtimeType == int) {
       int i = other;
-      return Fruction(numerator - i * denominator, denominator);
+      return Fraction(numerator - i * denominator, denominator);
     } else {
       throw ArgumentError("無効な計算です");
     }
   }
 
-  Fruction operator *(other) {
-    if (other.runtimeType == Fruction) {
-      Fruction i = other;
-      return Fruction(i.numerator * numerator, i.denominator * numerator);
+  Fraction operator *(other) {
+    if (other.runtimeType == Fraction) {
+      Fraction i = other;
+      return Fraction(i.numerator * numerator, i.denominator * numerator);
     } else if (other.runtimeType == int) {
       int i = other;
-      return Fruction(numerator * i, denominator);
+      return Fraction(numerator * i, denominator);
     } else {
       throw ArgumentError("無効な計算です");
     }
   }
 
-  Fruction operator /(other) {
-    if (other.runtimeType == Fruction) {
-      Fruction i = other;
-      return Fruction(numerator * i.denominator, denominator * i.numerator);
+  Fraction operator /(other) {
+    if (other.runtimeType == Fraction) {
+      Fraction i = other;
+      return Fraction(numerator * i.denominator, denominator * i.numerator);
     } else if (other.runtimeType == int) {
       int i = other;
-      return Fruction(numerator, denominator * i);
+      return Fraction(numerator, denominator * i);
     } else {
       throw ArgumentError("無効な計算です");
     }
@@ -89,7 +89,7 @@ class Fruction {
 
   @override
   bool operator ==(other) {
-    return other is Fruction &&
+    return other is Fraction &&
         other.denominator == denominator &&
         other.numerator == numerator;
   }
