@@ -17,11 +17,10 @@ Future<List<ResultData>> loadResultDataList() async {
 
   final jsonData = prefs.getStringList(SaveKeys.calc_result_data.name);
 
-  if (jsonData == null) {
-    return <ResultData>[];
-  }
-
-  return jsonData.map((s) => ResultData.fromJson(json.decode(s))).toList();
+  return jsonData
+          ?.map((resultJson) => ResultData.fromJson(json.decode(resultJson)))
+          .toList() ??
+      <ResultData>[];
 }
 
 enum SaveKeys {
