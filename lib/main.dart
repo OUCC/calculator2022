@@ -13,20 +13,33 @@ class MyApp extends StatelessWidget {
             body: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        TextFiled(), //メモリ部と数式表示部
+        TextField(), //メモリ部と数式表示部
         Keyboard(), //入力部
       ],
     )));
   }
 }
 
-//メモリと数式表示
-class TextFiled extends StatefulWidget {
+//メモリと数式表示。TextFiledとTextFieldは誤字ではなく別物。
+class TextField extends StatefulWidget {
   _TextFiledState createState() => _TextFiledState();
 }
 
 class _TextFiledState extends State<TextField> {
   String _expression = '1+1';
+
+  /////追加/////
+  void _UpdateText(String letter) {
+    setState(() {
+      if (letter == '=' || letter == 'C')
+        _expression = '';
+      else
+        _expression += letter;
+    });
+  }
+
+/////ここまで/////
+  ///
   @override
   Widget build(BuildContext context) {
     return Expanded(
