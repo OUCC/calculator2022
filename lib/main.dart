@@ -1,3 +1,4 @@
+import 'dart:async'; //Stream用
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,13 +27,13 @@ class TextField extends StatefulWidget {
 }
 
 class _TextFiledState extends State<TextField> {
-  String _expression = '1+1';
+  String _expression = '';
 
   /////追加/////
   void _UpdateText(String letter) {
     setState(() {
-      if (letter == '=' || letter == 'C')
-        _expression = '';
+      if (letter == '=' || letter == 'AC' || letter == '消')
+        _expression = ''; //=またはACを押したら画面リセット
       else
         _expression += letter;
     });
@@ -56,6 +57,14 @@ class _TextFiledState extends State<TextField> {
           ),
         ));
   }
+
+  static final controller = StreamController<String>();
+
+  ///Stream生成
+  @override
+  void initState() {
+    controller.stream.listen((event) => _UpdateText(event));
+  }
 }
 
 //キーボード
@@ -68,7 +77,7 @@ class Keyboard extends StatelessWidget {
             child: Container(
           color: const Color(0xff87cefa),
           child: GridView.count(
-            childAspectRatio: 1.3, // グリッドのサイズが正方形いっぱいにならないように
+            childAspectRatio: 1.5, // グリッドのサイズが正方形いっぱいにならないように。大きいほどサイズが小さくなる。
             crossAxisCount: 4, //一行に4個表示
             mainAxisSpacing: 3.0,
             crossAxisSpacing: 3.0,
@@ -84,7 +93,7 @@ class Keyboard extends StatelessWidget {
               '7',
               '8',
               '9',
-              '*',
+              '×',
               '4',
               '5',
               '6',
@@ -95,7 +104,7 @@ class Keyboard extends StatelessWidget {
               '+',
               '0',
               '.',
-              '×',
+              '消',
               '=',
             ].map((key) {
               return GridTile(
@@ -107,24 +116,27 @@ class Keyboard extends StatelessWidget {
   }
 }
 
+///キーボタン///
 class Button extends StatelessWidget {
   final _key;
   Button(this._key);
   @override
   Widget build(BuildContext context) {
     return Container(
-        //googleの円ボタン
+        //googleの円ボタン//
         child: ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
       ),
-      onPressed: () {},
       child: Center(
         child: Text(
           _key,
-          style: TextStyle(fontSize: 25.0),
+          style: TextStyle(fontSize: 30.0),
         ),
       ),
+      onPressed: () {
+        _TextFiledState.controller.sink.add(_key);
+      },
     ));
   }
 }
