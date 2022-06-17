@@ -34,6 +34,43 @@ Future<File> _fileOpen(String fileName) async {
   return File(path + "/" + fileName);
 }
 
+//実用的なテキストファイルの保存用クラス
+class TextSave {
+  String fileName = ""; //ファイル名で、拡張子込み
+  String writeString = ""; //ファイルに書き込む文字列
+  File? file; //書き込むファイル
+
+  //作るときにファイル名を指定します。
+  TextSave(String fileName) {
+    this.fileName = fileName;
+  }
+
+  //計算するごとにこれを呼び出してあげれば、計算の履歴を貯めていきます。
+  void textAdd(Map<String, dynamic> json) {
+    writeString = writeString +
+        json["formula"] +
+        "\n" +
+        json["result"] +
+        "\n" +
+        "\n"; //式と改行して結果を出力してまた改行
+  }
+
+  //テキストファイルに上書き保存（基本）
+  Future save() async {
+    file = await _fileOpen(fileName.toString());
+    file = await file?.writeAsString(writeString,
+        mode: FileMode.write, encoding: utf8, flush: false);
+  }
+
+  //テキストファイルに追記保存
+  Future saveApend() async {
+    file = await _fileOpen(fileName.toString());
+    file = await file?.writeAsString(writeString,
+        mode: FileMode.append, encoding: utf8, flush: false);
+  }
+}
+
+//非推奨な保存方法。どんどんストレージを圧迫する
 //jsonのmapを受け取って、計算式と結果だけをテキストファイルに追記する
 //引数：map型のjson, テキストファイルの名前
 Future<String> saveText(Map<String, dynamic> json, fileName) async {
