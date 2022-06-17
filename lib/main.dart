@@ -1,23 +1,24 @@
 import 'dart:async'; //Stream用
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 //https://2357developnote.blogspot.com/2020/05/flutter-calculator1.htmlを参考。雛形作成。
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
             body: Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
+      children: const <Widget>[
         MemoryField(), //メモリ部
         TextField(), //数式表示部
-        Keyboard_1(), //入力部1枚目
+        Keyboard1(), //入力部1枚目
       ],
     )));
   }
@@ -25,12 +26,15 @@ class MyApp extends StatelessWidget {
 
 //メモリ部。
 class MemoryField extends StatefulWidget {
+  const MemoryField({Key? key}) : super(key: key);
+
+  @override
   _MemoryFiledState createState() => _MemoryFiledState();
 }
 
 //メモリ部の続き。とりあえず数式表示部と同じ構造にするのがいいかな？
 class _MemoryFiledState extends State<MemoryField> {
-  String _expression = '1+1=2';
+  final String _expression = '1+1=2';
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -41,7 +45,7 @@ class _MemoryFiledState extends State<MemoryField> {
             alignment: Alignment.centerRight,
             child: Text(
               _expression,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 30.0,
               ),
             ),
@@ -52,6 +56,9 @@ class _MemoryFiledState extends State<MemoryField> {
 
 //数式表示部。TextFiledとTextFieldは誤字ではなく別物。
 class TextField extends StatefulWidget {
+  const TextField({Key? key}) : super(key: key);
+
+  @override
   _TextFiledState createState() => _TextFiledState();
 }
 
@@ -59,12 +66,13 @@ class _TextFiledState extends State<TextField> {
   String _expression = '';
 
   /////追加/////
-  void _UpdateText(String letter) {
+  void _updateText(String letter) {
     setState(() {
-      if (letter == '=' || letter == 'AC' || letter == '消')
-        _expression = ''; //=またはACを押したら画面リセット
-      else
+      if (letter == '=' || letter == 'AC' || letter == '消') {
+        _expression = '';
+      } else {
         _expression += letter;
+      }
     });
   }
 
@@ -74,14 +82,12 @@ class _TextFiledState extends State<TextField> {
   Widget build(BuildContext context) {
     return Expanded(
         flex: 1,
-        child: Container(
-          child: Align(
-            alignment: Alignment.centerRight, //右詰め
-            child: Text(
-              _expression,
-              style: TextStyle(
-                fontSize: 64.0,
-              ),
+        child: Align(
+          alignment: Alignment.centerRight, //右詰め
+          child: Text(
+            _expression,
+            style: const TextStyle(
+              fontSize: 64.0,
             ),
           ),
         ));
@@ -92,12 +98,15 @@ class _TextFiledState extends State<TextField> {
   //Stream生成
   @override
   void initState() {
-    controller.stream.listen((event) => _UpdateText(event));
+    super.initState();
+    controller.stream.listen((event) => _updateText(event));
   }
 }
 
 //キーボード1枚目
-class Keyboard_1 extends StatelessWidget {
+class Keyboard1 extends StatelessWidget {
+  const Keyboard1({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -110,12 +119,12 @@ class Keyboard_1 extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       // （2） 実際に表示するページを指定する
-                      builder: (context) => Keyboard_2()));
+                      builder: (context) => const Keyboard2()));
             },
             style: TextButton.styleFrom(
               primary: Colors.white,
             ),
-            child: Text('キーボード切替'),
+            child: const Text('キーボード切替'),
           ),
           Expanded(
               child: Center(
@@ -163,7 +172,9 @@ class Keyboard_1 extends StatelessWidget {
 }
 
 //キーボード2枚目
-class Keyboard_2 extends StatelessWidget {
+class Keyboard2 extends StatelessWidget {
+  const Keyboard2({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -214,21 +225,19 @@ class Keyboard_2 extends StatelessWidget {
 ///キーボタン///
 class Button extends StatelessWidget {
   final _key;
-  Button(this._key);
+  const Button(this._key, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-        //googleの円ボタン//
-        child: TextButton(
+    return TextButton(
       child: Center(
         child: Text(
           _key,
-          style: TextStyle(fontSize: 32.0, color: Colors.blueGrey),
+          style: const TextStyle(fontSize: 32.0, color: Colors.blueGrey),
         ),
       ),
       onPressed: () {
         _TextFiledState.controller.sink.add(_key);
       },
-    ));
+    );
   }
 }
