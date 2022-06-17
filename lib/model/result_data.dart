@@ -20,16 +20,46 @@ class ResultData {
 
   /// JSONをデコードして出てきた`Map<String, dynamic>`から[ResultData]を生成します。
   ResultData.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        formula = json["formula"],
-        result = json["result"],
-        createdDate = json["created_date"];
+      : id = json[keyId.jsonKeyName],
+        formula = json[keyFormula.jsonKeyName],
+        result = json[keyResult.jsonKeyName],
+        createdDate = json[keyCreatedDate.jsonKeyName];
 
   /// JSONへエンコードするためにデータを変換します。
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "formula": formula,
-        "result": result,
-        "created_date": createdDate,
+        keyId.jsonKeyName.toString(): id,
+        keyFormula.jsonKeyName.toString(): formula,
+        keyResult.jsonKeyName.toString(): result,
+        keyCreatedDate.jsonKeyName.toString(): createdDate,
       };
 }
+
+//列挙型を使ってキー用の文字列を取得出来るようにする
+enum JsonKey { id, formula, result, createdDate }
+
+extension TypeExtension on JsonKey {
+  static final Map<Enum, String> jsonKeyNames = {
+    JsonKey.id: "id",
+    JsonKey.formula: "formula",
+    JsonKey.result: "result",
+    JsonKey.createdDate: "created_date"
+  };
+  //何故かString?にしないとエラーがでます。この？は何の意味？
+  String? get jsonKeyName => jsonKeyNames[this];
+}
+
+//ここで宣言するのは多分良くない事
+JsonKey keyId = JsonKey.id;
+JsonKey keyFormula = JsonKey.formula;
+JsonKey keyResult = JsonKey.result;
+JsonKey keyCreatedDate = JsonKey.createdDate;
+
+/*もうこれ、
+Map<String, String> JsonKeyNames = {
+  "id": "id",
+  "formula": "formula",
+  "result": "result"
+  "createdDate": "created_date"
+  }
+}
+と何が違うのか*/
