@@ -1,5 +1,8 @@
 import 'dart:async'; //Stream用
+import 'package:calculator2022/sub.dart';
 import 'package:flutter/material.dart';
+
+//最初の画面表示（キーボード切替をする前）
 
 void main() {
   runApp(const MyApp());
@@ -114,12 +117,13 @@ class Keyboard1 extends StatelessWidget {
         child: Column(children: <Widget>[
           ElevatedButton(
             onPressed: () {
-              // （1） 指定した画面に遷移する
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      // （2） 実際に表示するページを指定する
-                      builder: (context) => const Keyboard2()));
+              // "push"で新規画面に遷移
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  // 遷移先の画面としてリスト追加画面を指定
+                  return const MyApp2(); //MyApp2はsub.dartに記述
+                }),
+              );
             },
             style: TextButton.styleFrom(
               primary: Colors.white,
