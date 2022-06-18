@@ -38,7 +38,7 @@ String getStrFromTime(double sec) {
   return hour.toString() + ":" + min.toString() + ":" + limSec.toString();
 }
 
-double getTimeFromStr(String strTime) {
+double? tryParseTimeFromStr(String strTime) {
   List strTimes = strTime.split(':');
   double totSec = 0;
   final int k = strTimes.length;
@@ -47,8 +47,12 @@ double getTimeFromStr(String strTime) {
     if (strTimes[l] == "") {
       strTimes[l] = "0";
     }
-    totSec += castNum(double.parse(strTimes[l]) * Math.pow(60, i));
+    final temp = double.tryParse(strTimes[l]);
+    if (temp == null) {
+      return null;
+    }
+    final double secTemp = temp * Math.pow(60, i);
+    totSec += castNum(secTemp);
   }
-
   return castNum(totSec);
 }

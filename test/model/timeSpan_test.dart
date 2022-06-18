@@ -23,11 +23,11 @@ void main() {
     expect(a, "1:2:3.4");
   });
   test("StringToDouble1", () {
-    final double b = getTimeFromStr("1:2:3.4");
+    final double? b = tryParseTimeFromStr("1:2:3.4");
     expect(b, 3723.4);
   });
   test("StringToDouble2", () {
-    final double c = getTimeFromStr("1.0002:::");
+    final double? c = tryParseTimeFromStr("1.0002:::");
     expect(c, 216043.2);
   });
 }
