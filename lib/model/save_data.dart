@@ -11,7 +11,7 @@ Future<void> saveResultDataList(List<ResultData> datas) async {
   final prefs = await SharedPreferences.getInstance();
 
   await prefs.setStringList(SaveKeys.calc_result_data.name,
-      datas.map((r) => json.encode(r.toString())).toList());
+      datas.map((r) => json.encode(r.toJson())).toList());
 }
 
 /// SharedPreferencesから結果を取得
@@ -22,7 +22,8 @@ Future<List<ResultData>> loadResultDataList() async {
   final jsonData = prefs.getStringList(SaveKeys.calc_result_data.name);
 
   return jsonData
-          ?.map((resultJson) => ResultData.fromJson(json.decode(resultJson)))
+          ?.map((resultJson) => ResultData.fromJson(
+              json.decode(resultJson) as Map<String, dynamic>))
           .toList() ??
       <ResultData>[];
 }
@@ -45,7 +46,7 @@ Future<void> saveExpressionDataList(List<ExpressionData> datas) async {
   final prefs = await SharedPreferences.getInstance();
 
   await prefs.setStringList(SaveKeys.calc_result_data.name,
-      datas.map((r) => json.encode(r.toString())).toList());
+      datas.map((r) => json.encode(r.toJson())).toList());
 }
 
 Future<List<ExpressionData>> loadExpressionDataList() async {
@@ -54,7 +55,8 @@ Future<List<ExpressionData>> loadExpressionDataList() async {
   final jsonData = prefs.getStringList(SaveKeys.expression_data.name);
 
   final exprData = jsonData
-          ?.map((exrJson) => ExpressionData.fromJson(json.decode(exrJson)))
+          ?.map((exrJson) => ExpressionData.fromJson(
+              json.decode(exrJson) as Map<String, dynamic>))
           .toList() ??
       <ExpressionData>[];
 

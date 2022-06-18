@@ -1,4 +1,6 @@
 import 'dart:async'; //Stream用
+import 'package:calculator2022/model/calculator.dart';
+import 'package:calculator2022/model/save_data.dart';
 import 'package:calculator2022/sub.dart';
 import 'package:flutter/material.dart';
 
@@ -65,17 +67,36 @@ class TextField extends StatefulWidget {
   _TextFiledState createState() => _TextFiledState();
 }
 
+const _numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", ":"];
+
 class _TextFiledState extends State<TextField> {
   String _expression = '';
 
   /////追加/////
-  void _updateText(String letter) {
-    setState(() {
-      if (letter == '=' || letter == 'AC' || letter == '消') {
-        _expression = '';
+  void _updateText(String letter) async {
+    late String setString;
+    if (letter == "=") {
+      final result = calculate(parseStr2Polish(
+          _expression.replaceAll("÷", "/").replaceAll("×", "*")));
+      setString = result.toString();
+      // await addResultData(_expression, result); なんかエラー
+    } else if (letter == "消") {
+      final temp = _expression.trim();
+      setString = temp.substring(0, temp.length - 1).trimRight();
+    } else if (_expression.isEmpty) {
+      setString = letter;
+    } else if (_numbers.contains(letter)) {
+      if (_numbers
+          .contains(_expression.trim().substring(_expression.length - 1))) {
+        setString = "$_expression$letter";
       } else {
-        _expression += letter;
+        setString = "$_expression $letter";
       }
+    } else {
+      setString = "$_expression $letter";
+    }
+    setState(() {
+      _expression = setString;
     });
   }
 
