@@ -25,7 +25,7 @@ class ResultData {
       : id = json["id"],
         formula = json["formula"],
         result = json["result"],
-        createdDate = DateTime.parse(json["created_date"])
+        createdDate = DateTime.parse(json["created_date"]);
 
   /// JSONへエンコードするためにデータを変換します。
   Map<String, dynamic> toJson() => {
