@@ -1,7 +1,6 @@
 import 'dart:async'; //Stream用
 import 'package:calculator2022/model/calculator.dart';
 import 'package:calculator2022/model/save_data.dart';
-import 'package:calculator2022/sub.dart';
 import 'package:flutter/material.dart';
 
 //最初の画面表示（キーボード切替をする前）
@@ -20,10 +19,10 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
             body: Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: const <Widget>[
-        MemoryField(), //メモリ部
-        TextField(), //数式表示部
-        Keyboard1(), //入力部1枚目
+      children: <Widget>[
+        const MemoryField(), //メモリ部
+        const TextField(), //数式表示部
+        Keyboard(), //入力部1枚目
       ],
     )));
   }
@@ -76,10 +75,13 @@ class _TextFiledState extends State<TextField> {
   void _updateText(String letter) async {
     late String setString;
     if (letter == "=") {
-      final result = calculate(parseStr2Polish(
-          _expression.replaceAll("÷", "/").replaceAll("×", "*")));
+      final result = calculate(parseStr2Polish(_expression
+          .replaceAll("÷", "/")
+          .replaceAll("×", "*")
+          .replaceAll("π", "pi")
+          .replaceAll("√", "sqrt")));
       setString = result.toString();
-      // await addResultData(_expression, result); なんかエラー
+      await addResultData(_expression, result); // なんかエラー
     } else if (letter == "消") {
       final temp = _expression.trim();
       setString = temp.substring(0, temp.length - 1).trimRight();
@@ -128,8 +130,20 @@ class _TextFiledState extends State<TextField> {
 }
 
 //キーボード1枚目
-class Keyboard1 extends StatelessWidget {
-  const Keyboard1({Key? key}) : super(key: key);
+class Keyboard extends StatefulWidget {
+  Keyboard({Key? key}) : super(key: key);
+
+  @override
+  _KeyboardState createState() => _KeyboardState();
+}
+
+class _KeyboardState extends State<Keyboard> {
+  bool switchBool = true;
+  void _onPressedStart() {
+    setState(() {
+      switchBool = !switchBool;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,61 +151,98 @@ class Keyboard1 extends StatelessWidget {
         flex: 5, //高さの割合
         child: Column(children: <Widget>[
           ElevatedButton(
-            onPressed: () {
-              // "push"で新規画面に遷移
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  // 遷移先の画面としてリスト追加画面を指定
-                  return const MyApp2(); //MyApp2はsub.dartに記述
-                }),
-              );
-            },
+            onPressed: _onPressedStart,
             style: TextButton.styleFrom(
               primary: Colors.white,
             ),
             child: const Text('キーボード切替'),
           ),
-          Expanded(
-              child: Center(
-                  child: Container(
-            color: const Color(0xff87cefa),
-            child: GridView.count(
-              childAspectRatio: 1.5, // グリッドのサイズが正方形いっぱいにならないように。大きいほどサイズが小さくなる。
-              crossAxisCount: 4, //一行に4個表示
-              mainAxisSpacing: 2.0,
-              crossAxisSpacing: 2.0,
-              children: [
-                '√',
-                'π',
-                '^',
-                'rd', //乱数
-                'AC',
-                '(',
-                ')',
-                '÷',
-                '7',
-                '8',
-                '9',
-                '×',
-                '4',
-                '5',
-                '6',
-                '-',
-                '1',
-                '2',
-                '3',
-                '+',
-                '0',
-                '.',
-                '消',
-                '=',
-              ].map((key) {
-                return GridTile(
-                  child: Button(key),
-                );
-              }).toList(),
-            ),
-          )))
+          if (switchBool) //初期のキーボード
+            Expanded(
+                child: Center(
+                    child: Container(
+              color: const Color(0xff87cefa),
+              child: GridView.count(
+                childAspectRatio:
+                    1.5, // グリッドのサイズが正方形いっぱいにならないように。大きいほどサイズが小さくなる。
+                crossAxisCount: 4, //一行に4個表示
+                mainAxisSpacing: 2.0,
+                crossAxisSpacing: 2.0,
+                children: [
+                  '√',
+                  'pi',
+                  '^',
+                  'rd', //乱数
+                  'AC',
+                  '(',
+                  ')',
+                  '÷',
+                  '7',
+                  '8',
+                  '9',
+                  '×',
+                  '4',
+                  '5',
+                  '6',
+                  '-',
+                  '1',
+                  '2',
+                  '3',
+                  '+',
+                  '0',
+                  '.',
+                  '消',
+                  '=',
+                ].map((key) {
+                  return GridTile(
+                    child: Button(key),
+                  );
+                }).toList(),
+              ),
+            )))
+          else //キーボード2枚目
+            Expanded(
+                child: Center(
+                    child: Container(
+              color: const Color(0xff87cefa),
+              child: GridView.count(
+                childAspectRatio:
+                    1.5, // グリッドのサイズが正方形いっぱいにならないように。大きいほどサイズが小さくなる。
+                crossAxisCount: 4, //一行に4個表示
+                mainAxisSpacing: 2.0,
+                crossAxisSpacing: 2.0,
+                children: [
+                  'sin',
+                  'cos',
+                  'tan',
+                  ':', //時間用
+                  'AC',
+                  'e',
+                  '//', //抵抗並列用演算子
+                  '÷',
+                  '7',
+                  '8',
+                  '9',
+                  '×',
+                  '4',
+                  '5',
+                  '6',
+                  '-',
+                  '1',
+                  '2',
+                  '3',
+                  '+',
+                  '0',
+                  '.',
+                  '消',
+                  '=',
+                ].map((key) {
+                  return GridTile(
+                    child: Button(key),
+                  );
+                }).toList(),
+              ),
+            )))
         ]));
   }
 }
