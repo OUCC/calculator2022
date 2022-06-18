@@ -4,11 +4,12 @@ import 'package:calculator2022/model/operators.dart';
 
 void main() {
   test("parseStrToPolish", () {
-    const str = "1 + 2 + 3 * ( 4 + 5 ) / 20 - -10";
-    expect("a", "a");
+    const str = "1 + 2 ^ 3 + 3 * ( 4 + 5 ) / 20 - -10";
     final expectedTerms = <Term>[
       Term.fromNum(1),
       Term.fromNum(2),
+      Term.fromNum(3),
+      Term.fromOpr(Operators.pow),
       Term.fromNum(3),
       Term.fromNum(4),
       Term.fromNum(5),
@@ -32,6 +33,8 @@ void main() {
       Term.fromNum(1),
       Term.fromNum(2),
       Term.fromNum(3),
+      Term.fromOpr(Operators.pow),
+      Term.fromNum(3),
       Term.fromNum(4),
       Term.fromNum(5),
       Term.fromOpr(Operators.add),
@@ -46,7 +49,7 @@ void main() {
 
     final result = calculate(argTerms);
 
-    expect(result, 14.35);
+    expect(result, 20.35);
   });
 
   test("calculate-unaryoperator", () {
