@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:calculator2022/model/expression_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,14 +9,14 @@ void main() {
     final actualJson = json.encode(data.toJson());
 
     const expectedJson =
-        '{"id":1,"name":"name","expression_string":"expressionString","created_date":"2020-01-01T00:00:00.000"}';
+        '{"id":1,"name":"name","operator":767,"expression_string":"expressionString","created_date":"2020-01-01T00:00:00.000"}';
 
     expect(actualJson, expectedJson);
   });
 
   test("fromJson", () {
     const sendingJson =
-        '{"id":1,"name":"name","expression_string":"expressionString","created_date":"2020-01-01T00:00:00.000"}';
+        '{"id":1,"name":"name","operator":767,"expression_string":"expressionString","created_date":"2020-01-01T00:00:00.000"}';
     final actualData = ExpressionData.fromJson(json.decode(sendingJson));
 
     expect(actualData.id, 1);

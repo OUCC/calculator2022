@@ -21,15 +21,15 @@ class ExpressionData {
   ExpressionData.fromJson(Map<String, dynamic> json)
       : id = json["id"],
         name = json["name"],
-        expressionString = json["expression_string"],
         operator = json["operator"],
+        expressionString = json["expression_string"],
         createdDate = DateTime.parse(json["created_date"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "expression_string": expressionString,
         "operator": operator,
+        "expression_string": expressionString,
         "created_date": createdDate.toIso8601String(),
       };
 }
