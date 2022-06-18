@@ -25,11 +25,16 @@ class ResultData {
         result = json["result"],
         createdDate = json["created_date"];
 
+//これは必要無いの
+  ResultData.fromStringDateTime(
+      this.id, this.formula, this.result, String stringDateTime)
+      : createdDate = DateTime.parse(stringDateTime)
+
   /// JSONへエンコードするためにデータを変換します。
   Map<String, dynamic> toJson() => {
         "id": id,
         "formula": formula,
         "result": result,
-        "created_date": createdDate,
+        "created_date": createdDate.toIso8601String(),
       };
 }
