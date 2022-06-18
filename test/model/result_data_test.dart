@@ -7,7 +7,7 @@ void main() {
       "id": 0,
       "formula": "fo-myura",
       "result": 0.3232,
-      "created_date": DateTime(2001, 05, 24, 12, 34)
+      "created_date": DateTime(2001, 05, 24, 12, 34).toIso8601String()
     };
     var jsd = ResultData.fromJson(json);
 
@@ -20,7 +20,7 @@ void main() {
       "id": 1,
       "formula": "fo-myura",
       "result": 3,
-      "created_date": DateTime(2001, 05, 24, 12, 34)
+      "created_date": DateTime(2001, 05, 24, 12, 34).toIso8601String()
     };
     final jsdJson = jsd.toJson();
 
@@ -35,7 +35,7 @@ void main() {
       "id": 1,
       "formula": "1 2 +",
       "result": 3,
-      "created_date": DateTime(2001, 05, 24, 12, 34)
+      "created_date": DateTime(2001, 05, 24, 12, 34).toIso8601String()
     };
     var jsdJson = jsd.toJson();
 
