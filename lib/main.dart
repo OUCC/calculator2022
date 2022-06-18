@@ -82,6 +82,8 @@ class _TextFiledState extends State<TextField> {
           .replaceAll("√", "sqrt")));
       setString = result.toString();
       await addResultData(_expression, result); // なんかエラー
+    } else if (letter == "AC") {
+      setString = "";
     } else if (letter == "消") {
       final temp = _expression.trim();
       setString = temp.substring(0, temp.length - 1).trimRight();
