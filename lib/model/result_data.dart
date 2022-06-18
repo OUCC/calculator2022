@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class ResultData {
   /// id
   final int id;
@@ -23,12 +25,7 @@ class ResultData {
       : id = json["id"],
         formula = json["formula"],
         result = json["result"],
-        createdDate = json["created_date"];
-
-//これは必要無いの
-  ResultData.fromStringDateTime(
-      this.id, this.formula, this.result, String stringDateTime)
-      : createdDate = DateTime.parse(stringDateTime)
+        createdDate = DateTime.parse(json["created_date"])
 
   /// JSONへエンコードするためにデータを変換します。
   Map<String, dynamic> toJson() => {
