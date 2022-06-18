@@ -1,5 +1,11 @@
 import 'dart:math' as Math;
 
+double castNum(double num) {
+  const int cast = 1000000;
+  return (num * cast).round() / cast;
+  //(cast ^ -1)未満をキャストするための関数です(現在はマイクロ)
+}
+
 int getSecFromTime(double sec) {
   return sec.toInt() % 60;
 }
@@ -10,12 +16,6 @@ int getMinFromTime(double sec) {
 
 int getHourFromTime(double sec) {
   return sec ~/ 3600;
-}
-
-double castNum(double num) {
-  const int cast = 1000000;
-  return (num * cast).toInt() / cast;
-  //(cast ^ -1)未満をキャストするための関数です(現在はマイクロ)
 }
 
 double getLimSecFromTime(double sec) {
@@ -47,8 +47,8 @@ double getTimeFromStr(String strTime) {
     if (strTimes[l] == "") {
       strTimes[l] = "0";
     }
-    totSec += castNum(double.parse(strTimes[l])) * Math.pow(60, i);
+    totSec += castNum(double.parse(strTimes[l]) * Math.pow(60, i));
   }
 
-  return totSec;
+  return castNum(totSec);
 }
