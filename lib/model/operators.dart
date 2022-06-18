@@ -120,8 +120,21 @@ Operator registerBinaryOperator(
 }
 
 /// 単項演算子を新しく登録します
-Operator registerUnaryOperator(
-    String opratorStr, Operator operator, UnaryOperator unaryOperator) {
+Operator registerUnaryOperator(String opratorStr, UnaryOperator unaryOperator,
+    [Operator? operator]) {
+  if (operator == null) {
+    for (var i = 0; i < 0xF; i++) {
+      if (_unaryOprFuncMap.keys.contains(0x2F0 + i)) {
+        continue;
+      }
+
+      operator = 0x2F0 + i;
+      break;
+    }
+    if (operator == null) {
+      throw const StackOverflowError();
+    }
+  }
   if (!operator.isUnary) {
     throw ArgumentError.value(operator, "引数operatorが正しい形式ではありません。",
         "operatorは operator&0x200 != 0 を満たす必要があります。");

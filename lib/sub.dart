@@ -1,16 +1,16 @@
 import 'dart:async'; //Stream用
-import 'package:calculator2022/sub.dart';
+import 'package:calculator2022/main.dart';
 import 'package:flutter/material.dart';
 
-//最初の画面表示（キーボード切替をする前）
+//キーボード切替をした後の画面
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp2());
 }
 
 //https://2357developnote.blogspot.com/2020/05/flutter-calculator1.htmlを参考。雛形作成。
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp2 extends StatelessWidget {
+  const MyApp2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       children: const <Widget>[
         MemoryField(), //メモリ部
         TextField(), //数式表示部
-        Keyboard1(), //入力部1枚目
+        Keyboard2(), //入力部2枚目
       ],
     )));
   }
@@ -106,9 +106,9 @@ class _TextFiledState extends State<TextField> {
   }
 }
 
-//キーボード1枚目
-class Keyboard1 extends StatelessWidget {
-  const Keyboard1({Key? key}) : super(key: key);
+//キーボード2枚目
+class Keyboard2 extends StatelessWidget {
+  const Keyboard2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -117,13 +117,8 @@ class Keyboard1 extends StatelessWidget {
         child: Column(children: <Widget>[
           ElevatedButton(
             onPressed: () {
-              // "push"で新規画面に遷移
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) {
-                  // 遷移先の画面としてリスト追加画面を指定
-                  return const MyApp2(); //MyApp2はsub.dartに記述
-                }),
-              );
+              // "pop"で前の画面に戻る
+              Navigator.of(context).pop();
             },
             style: TextButton.styleFrom(
               primary: Colors.white,
@@ -140,13 +135,13 @@ class Keyboard1 extends StatelessWidget {
               mainAxisSpacing: 2.0,
               crossAxisSpacing: 2.0,
               children: [
-                '√',
-                'π',
-                '^',
-                'rd', //乱数
+                'sin',
+                'cos',
+                'tan',
+                ':', //時間用
                 'AC',
-                '(',
-                ')',
+                'e',
+                '//', //抵抗並列用演算子
                 '÷',
                 '7',
                 '8',
@@ -172,57 +167,6 @@ class Keyboard1 extends StatelessWidget {
             ),
           )))
         ]));
-  }
-}
-
-//キーボード2枚目
-class Keyboard2 extends StatelessWidget {
-  const Keyboard2({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        flex: 2,
-        child: Center(
-            child: Container(
-          color: const Color(0xff87cefa),
-          child: GridView.count(
-            childAspectRatio: 1.5, // グリッドのサイズが正方形いっぱいにならないように。大きいほどサイズが小さくなる。
-            crossAxisCount: 4, //一行に4個表示
-            mainAxisSpacing: 3.0,
-            crossAxisSpacing: 3.0,
-            children: [
-              'sin',
-              'cos',
-              'tan',
-              ':', //時間用
-              'AC',
-              'e',
-              '//', //抵抗並列用演算子
-              '÷',
-              '7',
-              '8',
-              '9',
-              '×',
-              '4',
-              '5',
-              '6',
-              '-',
-              '1',
-              '2',
-              '3',
-              '+',
-              '0',
-              '.',
-              '消',
-              '=',
-            ].map((key) {
-              return GridTile(
-                child: Button(key),
-              );
-            }).toList(),
-          ),
-        )));
   }
 }
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:calculator2022/model/calculator.dart';
 import 'package:calculator2022/model/operators.dart';
@@ -58,5 +60,11 @@ void main() {
     var result = calculate(parseStr2Polish(formula));
 
     expect(result, 8);
+  });
+
+  test("calculate-0.2+0.1", () {
+    final result = calculate(parseStr2Polish("0.2 + 0.1"));
+
+    expect(result, 0.3);
   });
 }

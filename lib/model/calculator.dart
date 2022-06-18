@@ -91,7 +91,7 @@ double calculate(List<Term> terms) {
   if (stack.length > 1) {
     throw ArgumentError.value(terms, "termsの形式が正しくありません。");
   }
-  return stack.first;
+  return double.parse(stack.first.toStringAsFixed(8));
 }
 
 /// 特殊な文字を定数に変換します
