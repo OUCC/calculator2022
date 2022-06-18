@@ -1,3 +1,5 @@
+import 'dart:math' as Math;
+
 int getSecFromTime(double sec) {
   return sec.toInt() % 60;
 }
@@ -36,3 +38,21 @@ String getStrFromTime(double sec) {
   return hour.toString() + ":" + min.toString() + ":" + limSec.toString();
 }
 
+double getTimeFromStr(String strTime) {
+  List strTimes = strTime.split(':');
+  List dblTimes = <double>[];
+  double totSec = 0;
+  final int k = strTimes.length;
+  for (int i = 0; i < k; i++) {
+    if (strTimes[i] == "") {
+      strTimes[i] = "0";
+    }
+    dblTimes.add(double.parse(strTimes[i]));
+  }
+  for (int j = 0; j < k; j++) {
+    int l = k - j - 1;
+    totSec += dblTimes[l] * Math.pow(60, j);
+  }
+
+  return totSec;
+}
