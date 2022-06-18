@@ -29075,7 +29075,8 @@ s=5
 return A.a8(A.Hl(q.d,o),$async$n7)
 case 5:s=3
 break
-case 4:if(a==="\u6d88"){n=B.e.oM(q.d)
+case 4:if(a==="AC")l.b=""
+else if(a==="\u6d88"){n=B.e.oM(q.d)
 l.b=B.e.oN(B.e.a5(n,0,n.length-1))}else if(q.d.length===0)l.b=a
 else if(B.b.v(B.kI,a)){p=q.d
 p=B.b.v(B.kI,B.e.dA(B.e.oM(p),p.length-1))
