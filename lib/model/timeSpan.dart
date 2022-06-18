@@ -47,7 +47,11 @@ double getTimeFromStr(String strTime) {
     if (strTimes[l] == "") {
       strTimes[l] = "0";
     }
-    totSec += castNum(double.parse(strTimes[l]) * Math.pow(60, i));
+    final temp = double.tryParse(strTimes[l]) * Math.pow(60, i);
+    if(temp == null){
+      return null;
+    }
+    totSec += castNum(temp);
   }
 
   return castNum(totSec);
